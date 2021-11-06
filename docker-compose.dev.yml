@@ -1,0 +1,35 @@
+version: "3.7"
+volumes:
+  app:
+    driver_opts:
+      type: none
+      device: ${PWD}/www
+      o: bind,uid=1000,gid=1000
+services:
+    app:
+        volumes:
+            - source: .env
+              target: /var/www/.env
+              type: bind
+    www:
+        volumes:
+            - source: ./www
+              target: /var/www
+              type: bind
+        ports: 
+            - 8000:80
+    adminer:
+        image: adminer
+        labels:
+            traefik.enable: "true"
+            traefik.frontend.priority: "50"
+            traefik.frontend.rule: "HostRegexp: ${docker_project}-adminer.{domain:.+}"
+            traefik.docker.network: "proxy"
+            traefik.port: "8080"
+        networks:
+            default: {}
+            intern:
+                aliases:
+                    - adminer
+        depends_on:
+            - mysql
