@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+// use Krompi\Services\DoomsdayServiceProvider;
+use App\Providers\DoomsdayServiceProvider;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,8 +15,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+$doomsday = new DoomsdayServiceProvider('');
+ddd($doomsday->getWeekday(2012, 11, 29));
+// dd('test');
 
 Route::get('/', function () {
+    
     return view('welcome');
 });
 
