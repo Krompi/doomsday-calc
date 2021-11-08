@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -11,9 +11,11 @@ ARG no_proxy
 # ENV https_proxy=http://10.167.16.21:80
 # ENV no_proxy="localhost, *.bvv.bayern.de, *.blva.bayern.de, *.lvg.bayern.de, *.bybn"
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    build-essential apt-utils dialog  \
     git \
     curl \
     vim \
@@ -39,6 +41,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Node.js
 RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -
+RUN apt remove -y nodejs nodejs-doc
 RUN apt-get -y install nodejs
 RUN npm install -g npm@latest
 

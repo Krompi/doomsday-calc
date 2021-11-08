@@ -72,10 +72,14 @@ services:
                 aliases:
                     - www
         labels:
-            traefik.enable: "true"
-            traefik.frontend.priority: "50"
-            traefik.port: "80"
-            traefik.frontend.rule: "HostRegexp: ${docker_project}.{domain:.+}"
-            traefik.docker.network: "proxy"
+            # traefik.enable: "true"
+            # traefik.frontend.priority: "50"
+            # traefik.port: "80"
+            # traefik.frontend.rule: "HostRegexp: ${docker_project}.{domain:.+}"
+            # traefik.docker.network: "proxy"
+            - "traefik.enable=true"
+            - "traefik.docker.network=proxy"
+            - "traefik.http.routers.doomsday.rule=Host(`${docker_project}.app.loc`)"
+            - "traefik.http.routers.doomsday.entrypoints=web"
         depends_on:
             - app

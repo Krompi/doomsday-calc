@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // use Krompi\Services\DoomsdayServiceProvider;
 use App\Providers\DoomsdayServiceProvider;
+use App\Http\Controllers\QuizController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,13 +17,18 @@ use App\Providers\DoomsdayServiceProvider;
 |
 */
 $doomsday = new DoomsdayServiceProvider('');
-ddd($doomsday->getWeekday(2012, 11, 29));
+// dd($doomsday->getWeekday(2012, 11, 29));
 // dd('test');
 
 Route::get('/', function () {
-    
     return view('welcome');
 });
+
+Route::post( '/', [QuizController::class, 'getRandom'])->name('random');
+Route::get( '/date/{date}', [QuizController::class, 'start'])->name('start');
+// Route::get('/start', function () {
+//     return view('welcome');
+// });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');

@@ -104,10 +104,14 @@ class DoomsdayServiceProvider extends ServiceProvider
      * @param int $d Day, 1-2 digits
      * @return int Number of the weekday, 0 = Sun, 6 = Sat
      */
-    function getWeekday(int $yyyy, int $m, int $d): int {
+    // function getWeekday(int $yyyy, int $m, int $d): int {
+    function getWeekday(string $date): string {
+        $yyyy = date('Y', strtotime($date));
+        $m    = date('n', strtotime($date));
+        $d    = date('j', strtotime($date));
         $doomsday = $this->getNearestDoomsday($yyyy, $m);
         $yearAnchorDay = $this->getYearAnchorDay($yyyy);
 
-        return ($yearAnchorDay + ($d - $doomsday) + 35) % 7;
+        return $this->weekdays[($yearAnchorDay + ($d - $doomsday) + 35) % 7];
     }
 }
