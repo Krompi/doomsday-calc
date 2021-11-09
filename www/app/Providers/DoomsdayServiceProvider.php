@@ -18,6 +18,8 @@ class DoomsdayServiceProvider extends ServiceProvider
         6 => 'Saturday',
     ];
 
+    protected $outputs = [];
+
     /**
      * Register services.
      *
@@ -37,6 +39,10 @@ class DoomsdayServiceProvider extends ServiceProvider
     {
         //
     }
+    public function getOutput()
+    {
+        return $this->outputs;
+    }
 
     /**
      * Determines the anchor day a century.
@@ -45,6 +51,12 @@ class DoomsdayServiceProvider extends ServiceProvider
      * @return int Anchor day number
      */
     function getCenturyAnchorday(int $yyyy): int {
+        // Output
+        $this->outputs["century"]          = floor($yyyy / 100);
+        $this->outputs["century_steps"]    = floor($yyyy / 100) % 4;
+        $this->outputs["century_doomsday"] = (9 - (floor($yyyy / 100) % 4) * 2) % 7;
+        $this->outputs["century_doomsday_text"] = $this->translate($this->outputs["century_doomsday"]);
+
         return (9 - (floor($yyyy / 100) % 4) * 2) % 7;
     }
 
@@ -55,10 +67,19 @@ class DoomsdayServiceProvider extends ServiceProvider
      * @return int Year anchor day
      */
     function getYearAnchorDay(int $yyyy): int {
+        // Preparation
         $centuryAnchorday = $this->getCenturyAnchorday($yyyy);
         $yy = $yyyy % 100; // Year, 1-2 digits
 
-        return ($yy + floor($yy / 4) + $centuryAnchorday) % 7;
+        // Output
+        $this->outputs["year"]               = $yy;
+        $this->outputs["year_dozen"]         = floor($yy / 12);
+        $this->outputs["year_mod_12"]        = $yy % 12;
+        $this->outputs["year_mod_leap"]      = floor(($yy % 12) / 4);
+        $this->outputs["year_doomsday"]      = (floor($yy / 12) +($yy % 12) + (floor(($yy % 12) / 4)) + $centuryAnchorday) % 7;
+        $this->outputs["year_doomsday_text"] = $this->translate($this->outputs["year_doomsday"]);
+
+        return (floor($yy / 12) +($yy % 12) + (floor(($yy % 12) / 4)) + $centuryAnchorday) % 7;
     }
 
     /**
@@ -83,7 +104,7 @@ class DoomsdayServiceProvider extends ServiceProvider
         return [
             1 => !$isLeapYear ? 3 : 4,
             2 => !$isLeapYear ? 28 : 29,
-            3 => 0,
+            3 => 14,
             4 => 4,
             5 => 9,
             6 => 6,
@@ -106,12 +127,24 @@ class DoomsdayServiceProvider extends ServiceProvider
      */
     // function getWeekday(int $yyyy, int $m, int $d): int {
     function getWeekday(string $date): string {
+        // Preparation
         $yyyy = date('Y', strtotime($date));
         $m    = date('n', strtotime($date));
         $d    = date('j', strtotime($date));
         $doomsday = $this->getNearestDoomsday($yyyy, $m);
         $yearAnchorDay = $this->getYearAnchorDay($yyyy);
 
-        return $this->weekdays[($yearAnchorDay + ($d - $doomsday) + 35) % 7];
+        // Output
+        $this->outputs["month_nearest"]   = $doomsday;
+        $this->outputs["month_day"]       = $d;
+        $this->outputs["result_day"]      = ($yearAnchorDay + ($d - $doomsday) + 35) % 7;
+        $this->outputs["result_day_text"] = $this->translate($this->outputs["result_day"]);
+
+        return ($yearAnchorDay + ($d - $doomsday) + 35) % 7;
     }
+
+    public function translate(int $day): string {
+        return $this->weekdays[$day];
+    }
+
 }

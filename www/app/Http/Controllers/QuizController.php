@@ -16,8 +16,19 @@ class QuizController extends Controller
     }
 
     public function start($date) {
-        $doomsday = new DoomsdayServiceProvider('');
-        return view('quiz', compact('date'));
+        $doomsday  = new DoomsdayServiceProvider('');
+        $doomsday->getWeekday($date);
+        // $centuryDD = $doomsday->translate($doomsday->getCenturyAnchorday(date('Y', strtotime($date))));
+        // $yearDD    = $doomsday->translate($doomsday->getYearAnchorDay(date('Y', strtotime($date))));
+        // $weekDD     = $doomsday->translate($doomsday->getWeekday(date('Y', strtotime($date))));
+        // dd($doomsday->getOutput());
+        return view(
+                'quiz', 
+                [
+                    "date"   => $date,
+                    "output" => $doomsday->getOutput()
+                ]
+            );
         // dd($doomsday->getWeekday($date));
     }
 }

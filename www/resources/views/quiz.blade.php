@@ -38,7 +38,7 @@
     <div class="bg-blue-500 col-start-2 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
         <h3 class="font-semibold text-lg mb-1">Jahrhundert-Anker-Datum</h3>
         <p class="leading-tight text-justify w-full">
-            21 July 2021, 04:30 PM
+            {{ $output["century_doomsday_text"] }}
         </p>
     </div>
 </div>
@@ -55,7 +55,7 @@
     <div class="bg-blue-500 col-start-2 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
         <h3 class="font-semibold text-lg mb-1">Jahres-Anker-Datum</h3>
         <p class="leading-tight text-justify w-full">
-            21 July 2021, 04:30 PM
+            {{ $output["year_doomsday_text"] }}
         </p>
     </div>
 </div>
@@ -72,7 +72,7 @@
     <div class="bg-blue-500 col-start-2 col-end-12 p-4 rounded-xl my-4 mr-auto shadow-md w-full">
         <h3 class="font-semibold text-lg mb-1">gesuchter Wochentag</h3>
         <p class="leading-tight text-justify w-full">
-            21 July 2021, 04:30 PM
+            {{ $output["result_day_text"] }}
         </p>
     </div>
 </div>
