@@ -26,6 +26,7 @@ class QuizController extends Controller
                 'quiz', 
                 [
                     "date"   => $date,
+                    "weekdays"   => $doomsday->getWeekdays(),
                     "output" => $doomsday->getOutput()
                 ]
             );
